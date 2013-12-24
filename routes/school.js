@@ -41,15 +41,20 @@ exports.saveChanges = function(req,res){
 }
 
 exports.saveNewSchool = function(req,res){
+  console.log(req.body);
   var newSchool = new models.School({name: req.body.newSchool.name,
                                       est:req.body.newSchool.est,
                                       students:req.body.newSchool.students,
                                       ratio:req.body.newSchool.ratio,
                                       picture: req.body.newSchool.picture})
     newSchool.save(function(err){
-        if (err) return ("error saving Olin", err);
-        console.log('Olin saved');
+      if (err) return ("error saving Olin", err);
+      else {
+        res.send({redirect: '/addSchool'});
+        console.log('New School saved');
+      }
     });
+  // res.redirect('/addSchool');
 }
 
 exports.deleteSchool = function(req,res){

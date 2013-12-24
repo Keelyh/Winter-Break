@@ -8,7 +8,7 @@ block content
     .row
       p School Name:
         input#name(type='text',)
-      button.btn#pickImage Choose Image
+      button.btn.btn-default#pickImage Choose Image
     br
     br
     .row
@@ -28,7 +28,7 @@ block content
           input#ratio(type='text', value = '')
     .col-xs-1
       .row
-        button.btn#save Save School
+        button.btn.btn-success#save Save School
 
 
 
@@ -46,16 +46,21 @@ block content
       newSchool.est = $('#est').val();
       newSchool.students = $('#students').val();
       newSchool.ratio = $('#ratio').val();
-
+      console.log("TOBY");
+      //- $.post('/saveNewSchool', {newSchool: newSchool})
       $.ajax({
         url: '/saveNewSchool',
         type: 'POST',
         data: {'newSchool': newSchool},
         dataType: 'json',
         success: function(data) {
-          if (typeof data.redirect == 'string') {
-            window.location = data.redirect
-          }
+          console.log(data);
+          window.location.reload(true);
+
+          //- if (typeof data.redirect == 'string') {
+          //-   window.location = data.redirect
+          //- }
         }
       });
+      return false;
     })
