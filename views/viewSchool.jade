@@ -17,11 +17,15 @@ block content
     .col-xs-1
       .row
         button.btn.btn-primary.edit
-          .glyphicon.glyphicon-edit Edit School
+          .glyphicon.glyphicon-edit  Edit School
+      br
       .row
-        button.btn.addBuilding Add Building
+        button.btn.addBuilding
+          .glyphicon.glyphicon-plus  Add Building
+      br
       .row
-        button.btn.delete Delete School
+        button.btn.delete
+          .glyphicon.glyphicon-remove  Delete School
 
 
   script.
@@ -35,5 +39,16 @@ block content
 
     $('.delete').click(function (){
       console.log('#{school.name}');
-      $.post('/deleteSchool', {school:'#{school.name}'})
+      //- $.post('/deleteSchool', {school:'#{school.name}'})
+      $.ajax({
+        url: '/deleteSchool',
+        type: 'POST',
+        data: {school:'#{school.name}'},
+        dataType: 'json',
+        success: function(data) {
+          if (typeof data.redirect == 'string') {
+            window.location = data.redirect
+          }
+        }
+      });
     });

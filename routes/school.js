@@ -50,17 +50,17 @@ exports.saveNewSchool = function(req,res){
     newSchool.save(function(err){
       if (err) return ("error saving Olin", err);
       else {
-        res.send({redirect: '/addSchool'});
         console.log('New School saved');
+        res.send({redirect: '/addSchool'});
       }
     });
-  // res.redirect('/addSchool');
 }
 
 exports.deleteSchool = function(req,res){
   console.log(req.body);
   models.School.remove({name:req.body.school}).exec(function (err, user){
     console.log(req.body.school, "Removed");
+    res.send({redirect: '/collegeList'});
   })
 }
 
