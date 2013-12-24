@@ -1,0 +1,39 @@
+extends layout
+
+//- block head
+//-   script(src='/javascripts/jquery.simplemodal.1.4.4.min.js')
+//-   script(src='//ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js')
+//-   link(rel='stylesheet', href='/stylesheets/modal_basic.css')
+
+block content
+  .container
+    .col-xs-4
+      img.img-thumbnail(src='#{school.picture}')
+    .col-xs-7
+      h1 #{school.name}
+      p Established: #{school.est}
+      p Students: #{school.students}
+      p Student to Faculty Ratio: #{school.ratio}
+    .col-xs-1
+      .row
+        button.btn.btn-primary.edit
+          .glyphicon.glyphicon-edit Edit School
+      .row
+        button.btn.addBuilding Add Building
+      .row
+        button.btn.delete Delete School
+
+
+  script.
+    $('.edit').click(function (){
+      console.log('#{school.name}');
+      window.location = "/schoolPage/" + '#{school.name}' + "/edit";
+    });
+    $('.addBuilding').click(function (){
+      $.get('/addBuilding', {school:'#{school.name}'});
+    });
+
+    $('.delete').click(function (){
+      console.log('#{school.name}');
+      $.post('/deleteSchool', {school:'#{school.name}'})
+    });

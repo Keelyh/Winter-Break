@@ -1,0 +1,61 @@
+extends layout
+
+block content
+  script(src="//api.filepicker.io/v1/filepicker.js")
+  .container
+    .row
+      h3 Add a New School
+    .row
+      p School Name:
+        input#name(type='text',)
+      button.btn#pickImage Choose Image
+    br
+    br
+    .row
+      .col-xs-2
+        p Established:
+      .col-xs-9
+        input#est(type='text', value= '')
+    .row
+      .col-xs-2
+        p Students:
+      .col-xs-9
+          input#students(type='text', value = '')
+    .row
+      .col-xs-2
+        p Student to Faculty Ratio:
+      .col-xs-9
+          input#ratio(type='text', value = '')
+    .col-xs-1
+      .row
+        button.btn#save Save School
+
+
+
+  script.
+    var newSchool = {}
+    filepicker.setKey('AG4iSyAFR1ix7zdHsvAtKz');
+    $('#pickImage').click(function (){
+      filepicker.pickAndStore({mimetype: 'image/*'}, {}, function (InkBlobs){
+        newSchool.picture = InkBlobs[0].url;
+      });
+    });
+
+    $('#save').click(function () {
+      newSchool.name = $('#name').val();
+      newSchool.est = $('#est').val();
+      newSchool.students = $('#students').val();
+      newSchool.ratio = $('#ratio').val();
+
+      $.ajax({
+        url: '/saveNewSchool',
+        type: 'POST',
+        data: {'newSchool': newSchool},
+        dataType: 'json',
+        success: function(data) {
+          if (typeof data.redirect == 'string') {
+            window.location = data.redirect
+          }
+        }
+      });
+    })

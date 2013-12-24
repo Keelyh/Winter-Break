@@ -1,0 +1,37 @@
+extends layout
+
+block content
+  .container
+    form.form-inline
+      .form-group
+        .col-xs-4
+          h3 Find A School:
+        .col-xs-3
+          input#SchoolSearch(type='text', placeholder= 'This doesnt work yet :(')
+        .col-xs-4
+          button.btn.btn-inverse(type='submit', id='searchSchool') Search
+        .col-xs-1.text-right
+          button.btn.btn-default#addSchool
+            a(href = '/addSchool') Add School
+    br
+    for school in schools
+      .panel.panel-info.schoolPanel(id="#{school.name}")
+        .panel-heading
+          h2.panel-title #{school.name}
+        .panel-body
+          .col-xs-3
+            img.img-thumbnail(src=school.picture, data-caption=school.name)
+          .col-xs-9
+            p Established: #{school.est}
+            p Students: #{school.students}
+            p Student to Faculty Ratio: #{school.ratio}
+
+  script.
+    $('.schoolPanel').click(function (){
+      window.location = "/schoolPage/" + $(this).attr('id');
+      return false;
+    });
+    //- $('#addSchool').click(function (){
+    //-   $.get('/addSchool');
+    //-   return false;
+    //- });

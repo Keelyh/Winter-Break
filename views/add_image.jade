@@ -1,0 +1,23 @@
+extends layout
+
+block content
+  script(src="//api.filepicker.io/v1/filepicker.js")
+  .container
+    .row
+      h3 Create a New Drink
+      button.btn#pickImage Choose Image
+      img#readResultImg
+
+  script.
+    filepicker.setKey('AG4iSyAFR1ix7zdHsvAtKz');
+    $('#pickImage').click(function (){
+      filepicker.read(this, {base64encode: true}, function(imgdata){
+       $('#readResultImg').attr('src', 'data:image/png;base64,'+imgdata);
+          }, function(fperror) {
+            alert(fperror);
+      });
+      filepicker.pickAndStore({mimetype: 'image/*'}, {}, function (InkBlobs){
+        newDrink.image = InkBlobs[0].url+'/convert?w=203&h=306&fit=scale';
+        newDrink.imageSmall = InkBlobs[0].url+'/convert?w=61&h=92&fit=scale';
+      });
+    });

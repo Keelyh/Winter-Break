@@ -1,0 +1,39 @@
+extends layout
+
+block content
+  .container
+    .col-xs-4
+      img.img-thumbnail(src='#{school.picture}')
+    .col-xs-7
+      h1#schoolname(name='#{school.name}') #{school.name}
+      p Established:
+      input#est(type='text', value= '#{school.est}')
+      p Students:
+      input#students(type='text', value = '#{school.students}')
+      p Student to Faculty Ratio:
+      input#ratio(type='text', value = '#{school.ratio}')
+    .col-xs-1
+      .row
+        button.btn.btn-default#save Save School
+
+
+  script.
+    var editSchool = {}
+    $('#save').click(function (){
+      editSchool.name = $('#schoolname').attr('name');
+      editSchool.est = $('#est').val();
+      editSchool.students = $('#students').val();
+      editSchool.ratio = $('#ratio').val();
+
+      $.ajax({
+        url: '/saveSchool',
+        type: 'POST',
+        data: {'editSchool': editSchool},
+        dataType: 'json',
+        success: function(data) {
+          if (typeof data.redirect == 'string') {
+            window.location = data.redirect
+          }
+        }
+      });
+    })
