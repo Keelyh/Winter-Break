@@ -1,0 +1,62 @@
+extends layout
+
+block content
+  script(src="//api.filepicker.io/v1/filepicker.js")
+  .container
+    .form
+      .row
+        h3 Add a Building to #{school}
+      .row
+        .col-xs-1
+          p Building Name:
+        .col-xs-2
+          input#name(type='text',)
+      .row
+        .col-xs-1
+          |Type
+        .col-xs-2
+          select#type
+            option Dorm
+            option Student Center
+            option Outside
+            option Offices
+            option Academic Center
+      br
+      .row
+        .col-xs-2
+          button.btn.btn-default#pickImage Choose Image
+        .col-xs-3
+          img.img-thumbnail#picked(src="")
+      br
+      .row
+        .col-xs-12
+          button.btn.btn-success#save Save School
+
+
+
+  script.
+    var newBuilding = {}
+    filepicker.setKey('AG4iSyAFR1ix7zdHsvAtKz');
+    $('#pickImage').click(function (){
+      filepicker.pickAndStore({mimetype: 'image/*'}, {}, function (InkBlobs){
+        newBuilding.picture = InkBlobs[0].url;
+        $('#picked').removeAttr("src").attr('src', InkBlobs[0].url);
+      });
+    });
+    $('#save').click(function(){
+      newBuilding.type = $('#type').val();
+      newBuilding.name = $('#name').val();
+      $.ajax({
+        url: '/saveNewBuilding',
+        type: 'POST',
+        data: {newBuilding: newBuilding, school:'#{school}'},
+        dataType: 'json',
+        success: function(data) {
+          console.log(data);
+          if (typeof data.redirect == 'string') {
+            window.location = data.redirect
+          }
+        }
+      });
+      return false;
+    })
