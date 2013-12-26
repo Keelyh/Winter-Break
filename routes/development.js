@@ -15,16 +15,11 @@ exports.populate = function(req, res){
         if (err) return ("error saving Olin", err);
         console.log('Olin saved');
     });
-    var ac = new models.Building({name: "Academic Center", location: 'Main Campus'})
-    ac.save(function(err){
-        if (err) return ("error saving Olin", err);
-        console.log('Olin saved');
-    });
     var scripps = new models.School({name: "Scripps College", est:1926, students:950,
                     ratio: "9 to 1", picture: "/images/scripps.jpg"})
     scripps.save(function(err){
         if (err) return ("error saving Olin", err);
-        console.log('Olin saved');
+        console.log('scripps saved');
     });
     res.send("populated");
 }

@@ -65,8 +65,9 @@ app.post('/saveSchool', school.saveChanges);
 app.post('/saveNewSchool', school.saveNewSchool);
 app.post('/deleteSchool', school.deleteSchool);
 app.get('/testing', development.testing);
-app.get('/addBuilding', school.addBuilding);
-// app.post('/saveBuilding', school.saveBuilding);
+app.get('/addBuilding/:school', school.addBuilding);
+app.post('/saveNewBuilding', school.saveNewBuilding);
+app.get('/building/:building', school.building);
 
 
 

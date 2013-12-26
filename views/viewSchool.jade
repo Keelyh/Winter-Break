@@ -1,31 +1,43 @@
 extends layout
 
-//- block head
-//-   script(src='/javascripts/jquery.simplemodal.1.4.4.min.js')
-//-   script(src='//ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js')
-//-   link(rel='stylesheet', href='/stylesheets/modal_basic.css')
+block head
+
 
 block content
   .container
-    .col-xs-4
-      img.img-thumbnail(src='#{school.picture}')
-    .col-xs-7
-      h1 #{school.name}
-      p Established: #{school.est}
-      p Students: #{school.students}
-      p Student to Faculty Ratio: #{school.ratio}
-    .col-xs-1
+    .row
+      .col-xs-4
+        img.img-thumbnail(src='#{school.picture}')
+      .col-xs-6
+        h1 #{school.name}
+        p Established: #{school.est}
+        p Students: #{school.students}
+        p Student to Faculty Ratio: #{school.ratio}
+      .col-xs-2
+        .row
+          button.btn.btn-primary.edit
+            .glyphicon.glyphicon-edit  Edit School
+        br
+        .row
+          button.btn.addBuilding
+            .glyphicon.glyphicon-plus  Add Building
+        br
+        .row
+          button.btn.delete
+            .glyphicon.glyphicon-remove  Delete School
+    br
+    if (school._buildings.length > 0)
       .row
-        button.btn.btn-primary.edit
-          .glyphicon.glyphicon-edit  Edit School
-      br
+        h3 Buildings
       .row
-        button.btn.addBuilding
-          .glyphicon.glyphicon-plus  Add Building
-      br
-      .row
-        button.btn.delete
-          .glyphicon.glyphicon-remove  Delete School
+        .col-xs-12
+          for building in school._buildings
+            .col-xs-3
+              h5 #{building.name}
+              img.img-thumbnail.buildingPic(src='#{building.picture}', data-caption='#{building.name}',id='#{building.name}')
+        //- |#{school._buildings}
+
+
 
 
   script.
@@ -34,9 +46,11 @@ block content
       window.location = "/schoolPage/" + '#{school.name}' + "/edit";
     });
     $('.addBuilding').click(function (){
-      $.get('/addBuilding', {school:'#{school.name}'});
+      //- $.modal("<div><h1>SimpleModal</h1></div>");
+      //- return false;
+      window.location = "/addBuilding/" +'#{school.name}';
+      return false;
     });
-
     $('.delete').click(function (){
       console.log('#{school.name}');
       //- $.post('/deleteSchool', {school:'#{school.name}'})
@@ -52,3 +66,7 @@ block content
         }
       });
     });
+    $('.buildingPic').click(function (){
+      console.log($(this).attr('id'));
+      window.location = "/building/" +$(this).attr('id');
+    })

@@ -4,20 +4,42 @@ block content
   script(src="//api.filepicker.io/v1/filepicker.js")
   .container
     .row
-      h3 Create a New Drink
-      button.btn#pickImage Choose Image
-      img#readResultImg
+      h3 Add a Photo
+    .row
+      .col-xs-3
+        img.img-thumbnail#picked(src="")
+    .row
+      .col-xs-3
+        button.btn#pickImage Choose Image
+    br
+    br
+    .row
+      .col-xs-3
+        P What school?
+        select.form-control#school
+          for school in schools
+            option #{school.name}
+    br
+    .row
+      .col-xs-3
+        P What building?
+        select.form-control
+          for school in schools
+            for building in school._buildings
+              //- p #{building.name}
+              option #{building.name}
+
+    .row
+      .col-xs-3
+        button.btn.btn-success#save Save School
 
   script.
     filepicker.setKey('AG4iSyAFR1ix7zdHsvAtKz');
     $('#pickImage').click(function (){
-      filepicker.read(this, {base64encode: true}, function(imgdata){
-       $('#readResultImg').attr('src', 'data:image/png;base64,'+imgdata);
-          }, function(fperror) {
-            alert(fperror);
-      });
       filepicker.pickAndStore({mimetype: 'image/*'}, {}, function (InkBlobs){
-        newDrink.image = InkBlobs[0].url+'/convert?w=203&h=306&fit=scale';
-        newDrink.imageSmall = InkBlobs[0].url+'/convert?w=61&h=92&fit=scale';
+        newSchool.picture = InkBlobs[0].url;
+        $('#picked').removeAttr("src").attr('src', InkBlobs[0].url);
       });
     });
+
+    $

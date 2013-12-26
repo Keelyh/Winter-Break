@@ -26,8 +26,9 @@ exports.School = School;
 
 var buildingSchema = new Schema({
         name: String,
-        location: String,
+        // school: { type: Schema.Types.ObjectId, ref: 'School' },
         picture: String,
+        type: String,
         comments: [{ type: Schema.Types.ObjectId, ref: 'user', comment: String }]
 });
 

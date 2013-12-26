@@ -14,7 +14,7 @@ exports.page = function(req, res){
 exports.viewSchool = function(req, res){
 
   // console.log(req.params.school);
-  models.School.findOne({name:req.params.school}).exec(function (err, school){
+  models.School.findOne({name:req.params.school}).populate('_buildings').exec(function (err, school){
     // console.log(school);
     res.render('viewSchool', { title: 'College List', school:school});
   });
@@ -35,8 +35,7 @@ exports.saveChanges = function(req,res){
                           students:req.body.editSchool.students,
                           ratio:req.body.editSchool.ratio}}).exec(function (err, user){
         console.log(req.body.editSchool.name, "updated");
-    res.redirect('/collegeList');
-
+    res.send({redirect: '/schoolPage/'+req.body.editSchool.name});
   })
 }
 
@@ -65,6 +64,32 @@ exports.deleteSchool = function(req,res){
 }
 
 exports.addBuilding = function(req, res){
-  console.log(req.query);
-  res.send("HEYL");
+  console.log(req.params.school);
+  res.render("addBuilding", {title: "Add Building", school: req.params.school});
+}
+
+exports.saveNewBuilding = function(req,res){
+  console.log(req.body);
+  var newBuilding = new models.Building({name: req.body.newBuilding.name,
+                                      type:req.body.newBuilding.type,
+                                      picture: req.body.newBuilding.picture})
+  newBuilding.save(function(err){
+    if (err) return ("error saving Building", err);
+    else {
+      console.log('New School saved');
+    }
+  });
+  models.School.update({name:req.body.school},
+    {$push: {_buildings:newBuilding}})
+  .exec(function (err, numAffected, raw){
+      res.send({redirect: '/addBuilding/'+req.body.school});
+  })
+}
+
+exports.building = function(req,res){
+  console.log(req.params.building);
+  models.Building.findOne({name:req.params.school}).populate('_pictures').exec(function (err, building){
+    // console.log(school);
+    res.render('viewBuilding', { title: 'College List', building:building});
+  });
 }

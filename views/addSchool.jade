@@ -51,7 +51,6 @@ block content
       newSchool.est = $('#est').val();
       newSchool.students = $('#students').val();
       newSchool.ratio = $('#ratio').val();
-      console.log("TOBY");
       //- $.post('/saveNewSchool', {newSchool: newSchool})
       $.ajax({
         url: '/saveNewSchool',
@@ -60,8 +59,6 @@ block content
         dataType: 'json',
         success: function(data) {
           console.log(data);
-          //- window.location.reload(true);
-
           if (typeof data.redirect == 'string') {
             window.location = data.redirect
           }
