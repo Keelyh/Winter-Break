@@ -4,7 +4,7 @@ var bcrypt = require('bcrypt');
 exports.populate = function(req, res){
     // this is to populate the database for development
     var hashedk = bcrypt.hashSync("keely", 10);
-    var keely = new models.User({name: "Keely", password: hashedk});
+    var keely = new models.User({name: "Keely", password: hashedk, picture: "/images/keely.jpg"});
     keely.save(function(err){
         if (err) return ("error saving Keely", err);
         console.log('Keely saved');
@@ -15,12 +15,12 @@ exports.populate = function(req, res){
         if (err) return ("error saving Olin", err);
         console.log('Olin saved');
     });
-    var scripps = new models.School({name: "Scripps College", est:1926, students:950,
-                    ratio: "9 to 1", picture: "/images/scripps.jpg"})
-    scripps.save(function(err){
-        if (err) return ("error saving Olin", err);
-        console.log('scripps saved');
-    });
+    // var scripps = new models.School({name: "Scripps College", est:1926, students:950,
+    //                 ratio: "9 to 1", picture: "/images/scripps.jpg"})
+    // scripps.save(function(err){
+    //     if (err) return ("error saving Olin", err);
+    //     console.log('scripps saved');
+    // });
     res.send("populated");
 }
 

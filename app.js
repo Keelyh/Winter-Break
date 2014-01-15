@@ -52,23 +52,38 @@ if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
 
-app.get('/', routes.index);
+function checkLoggedIn() {
+  return function(req, res, next) {
+    if (!req.session.user){
+      res.render('signin', {title: 'Sign In'});
+    } else {
+      next();
+    };
+  }
+}
+
+app.get('/', checkLoggedIn(), routes.index);
 app.get('/users', user.list);
 app.get('/dev', development.populate);
-app.get('/collegeList', cl.disp);
-app.get('/addPhoto', photo.first);
-app.get('/addSchool', school.addSchool);
+app.get('/collegeList', checkLoggedIn(), cl.disp);
+app.get('/addPhoto', checkLoggedIn(), photo.first);
+app.get('/addSchool', checkLoggedIn(), school.addSchool);
 app.post('/schoolPage', school.page);
-app.get('/schoolPage/:school', school.viewSchool);
-app.get('/schoolPage/:school/edit', school.edit);
+app.get('/schoolPage/:school', checkLoggedIn(), school.viewSchool);
+app.get('/schoolPage/:school/edit', checkLoggedIn(), school.edit);
 app.post('/saveSchool', school.saveChanges);
 app.post('/saveNewSchool', school.saveNewSchool);
 app.post('/deleteSchool', school.deleteSchool);
 app.get('/testing', development.testing);
-app.get('/addBuilding/:school', school.addBuilding);
-app.post('/saveNewBuilding', school.saveNewBuilding);
-app.get('/building/:building', school.building);
-
+app.get('/addBuilding/:school', checkLoggedIn(), school.addBuilding);
+app.post('/saveNewBuilding', checkLoggedIn(), school.saveNewBuilding);
+app.get('/building/:building', checkLoggedIn(), school.building);
+app.post('/saveNewPicture', school.saveNewPicture);
+app.post('/addComment', school.addComment);
+app.get('/signup', user.signup);
+app.get('/signin', user.signin);
+app.post('/verify', user.login);
+app.post('/newUser', user.create);
 
 
 http.createServer(app).listen(app.get('port'), function(){

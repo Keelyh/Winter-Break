@@ -14,6 +14,11 @@ block content
     br
     br
     .row
+      .col-xs-2
+        p Caption:
+      .col-xs-10
+        input#cap(type='text', value= '')
+    .row
       .col-xs-3
         P What school?
         select.form-control#school
@@ -23,7 +28,7 @@ block content
     .row
       .col-xs-3
         P What building?
-        select.form-control
+        select.form-control#building
           for school in schools
             for building in school._buildings
               //- p #{building.name}
@@ -31,15 +36,33 @@ block content
 
     .row
       .col-xs-3
-        button.btn.btn-success#save Save School
+        button.btn.btn-success#save Save Photo
 
   script.
+    var newPicture = {}
     filepicker.setKey('AG4iSyAFR1ix7zdHsvAtKz');
     $('#pickImage').click(function (){
       filepicker.pickAndStore({mimetype: 'image/*'}, {}, function (InkBlobs){
-        newSchool.picture = InkBlobs[0].url;
+        newPicture.picture = InkBlobs[0].url;
         $('#picked').removeAttr("src").attr('src', InkBlobs[0].url);
       });
     });
 
-    $
+    $('#save').click(function () {
+      newPicture.location = $('#school').val();
+      newPicture.building = $('#building').val();
+      newPicture.caption = $('#cap').val();
+      $.ajax({
+        url: '/saveNewPicture',
+        type: 'POST',
+        data: {'newPicture': newPicture},
+        dataType: 'json',
+        success: function(data) {
+          console.log(data);
+          if (typeof data.redirect == 'string') {
+            window.location = data.redirect
+          }
+        }
+      });
+      return false;
+    })

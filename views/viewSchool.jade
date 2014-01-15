@@ -6,13 +6,19 @@ block head
 block content
   .container
     .row
-      .col-xs-4
-        img.img-thumbnail(src='#{school.picture}')
-      .col-xs-6
+      .col-xs-5
+        img(src='#{school.picture}')
+      .col-xs-5
         h1 #{school.name}
-        p Established: #{school.est}
-        p Students: #{school.students}
-        p Student to Faculty Ratio: #{school.ratio}
+        .row
+          .col-xs-5
+            p Established:
+            p Students:
+            p Student to Faculty Ratio:
+          .col-xs-3
+            p #{school.est}
+            p #{school.students}
+            p #{school.ratio}
       .col-xs-2
         .row
           button.btn.btn-primary.edit
@@ -25,6 +31,10 @@ block content
         .row
           button.btn.delete
             .glyphicon.glyphicon-remove  Delete School
+        br
+        //- .row
+          button.btn
+            .glyphicon.glyphicon-plus-sign  Delete School
     br
     if (school._buildings.length > 0)
       .row
@@ -46,8 +56,6 @@ block content
       window.location = "/schoolPage/" + '#{school.name}' + "/edit";
     });
     $('.addBuilding').click(function (){
-      //- $.modal("<div><h1>SimpleModal</h1></div>");
-      //- return false;
       window.location = "/addBuilding/" +'#{school.name}';
       return false;
     });

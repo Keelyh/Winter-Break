@@ -4,7 +4,7 @@ var Schema = mongoose.Schema;
 var userSchema = new Schema({
         name: String,
         password: String,
-        photo: String,
+        picture: String,
         _followPeople: [{ type: Schema.Types.ObjectId, ref: 'User' }],
         _followSchools: [{ type: Schema.Types.ObjectId, ref: 'School' }]
 });
@@ -27,9 +27,14 @@ exports.School = School;
 var buildingSchema = new Schema({
         name: String,
         // school: { type: Schema.Types.ObjectId, ref: 'School' },
+        _photos: [{ type: Schema.Types.ObjectId, ref: 'Photo'}],//, comment: String }],
         picture: String,
         type: String,
-        comments: [{ type: Schema.Types.ObjectId, ref: 'user', comment: String }]
+        _comments: [{
+                comment: String,
+                user: {type: Schema.Types.ObjectId, ref: 'User'},
+                posted:  {type: Date, default: Date.now},
+                }]
 });
 
 var Building =mongoose.model('Building', buildingSchema);
@@ -37,12 +42,14 @@ exports.Building = Building;
 
 
 var photoSchema = new Schema({
-        url: String,
+        picture: String,
+        caption: String,
+        user: { type: Schema.Types.ObjectId, ref: 'User' },
         location: { type: Schema.Types.ObjectId, ref: 'School' },
-        Building: { type: Schema.Types.ObjectId, ref: 'Building' },
+        building: { type: Schema.Types.ObjectId, ref: 'Building' },
         likes: [{ type: Schema.Types.ObjectId, ref: 'User' }],
         dislikes: [{ type: Schema.Types.ObjectId, ref: 'User' }]
 });
 
-var Photo =mongoose.model('Photo', buildingSchema);
-exports.Building = Building;
+var Photo =mongoose.model('Photo', photoSchema);
+exports.Photo = Photo;

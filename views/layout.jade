@@ -6,9 +6,7 @@ html
     //- link(rel='stylesheet', href='//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap-theme.min.css')
     script(src='http://code.jquery.com/jquery-2.0.3.min.js')
     script(src='//netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js')
-    //- Turn these two off when connected to the internet
-    //- link(rel='stylesheet', href='/stylesheets/dist/css/bootstrap-theme.css')
-    //- link(rel='stylesheet', href='/stylesheets/dist/css/bootstrap.css')
+
 
     //- This makese the navbar float
     link(rel='stylesheet', href='/stylesheets/style.css')
@@ -17,7 +15,8 @@ html
     //- link(rel='stylesheet', href='/stylesheets/modal_basic.css')
 
   body
-    include header
+    if (user)
+        include header
 
     block content
 

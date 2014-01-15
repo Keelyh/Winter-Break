@@ -1,42 +1,7 @@
 extends layout
 
 block content
-  h3 Hello Keely
+  .container
+    h3 Hello #{user.name}
 
   script.
-    var newDrink = {
-      ingredientList: []
-    }
-    $('.addLiquid').click(function(){
-      $('#currentIngredients').append('<div class="row"><div class="small-12 columns"><div data-alert class="alert-box secondary ingredients" name="'+ $('#ingredient1').val() +'" unit="' + $('#units1').val() + '">'+ $('#ingredient1').val() +' (' + $('#units1').val() + ') <a href="#" class="close">&times;</a></div></div></div>');
-      $('#ingredient1').prop('selectedIndex',0);
-      $('#units1').val('');
-    });
-
-    $('#saveDrink').click(function(){
-      $('.ingredients').each(function(){
-        newDrink.ingredientList.push({name: $(this).attr('name'), units: $(this).attr('unit')});
-      });
-      newDrink.name = $('#drinkname').val();
-      newDrink.cost = $('#cost').val();
-      newDrink.price = $('#price').val();
-      $.ajax({
-        url: '/saveDrink',
-        type: 'POST',
-        data: {'newDrink': newDrink},
-        dataType: 'json',
-        success: function(data) {
-          if (typeof data.redirect == 'string') {
-            window.location = data.redirect
-          }
-        }
-      });
-      return false;
-    });
-
-    $('#pickImage').click(function (){
-      filepicker.pickAndStore({mimetype: 'image/*'}, {}, function (InkBlobs){
-        newDrink.image = InkBlobs[0].url+'/convert?w=203&h=306&fit=scale';
-        newDrink.imageSmall = InkBlobs[0].url+'/convert?w=61&h=92&fit=scale';
-      });
-    });

@@ -3,7 +3,7 @@ var models = require("../models.js");
 exports.addSchool = function(req, res){
   console.log("KEELY");
   // res.send("KEEly");
-  res.render('addSchool', { title: 'College List'});
+  res.render('addSchool', { title: 'College List', user:req.session.user});
 }
 
 exports.page = function(req, res){
@@ -16,7 +16,7 @@ exports.viewSchool = function(req, res){
   // console.log(req.params.school);
   models.School.findOne({name:req.params.school}).populate('_buildings').exec(function (err, school){
     // console.log(school);
-    res.render('viewSchool', { title: 'College List', school:school});
+    res.render('viewSchool', { title: 'College List', user:req.session.user, school:school});
   });
 }
 
@@ -24,7 +24,7 @@ exports.viewSchool = function(req, res){
 exports.edit = function(req,res){
   models.School.findOne({name:req.params.school}).exec(function (err, school){
     // console.log(school);
-    res.render('editSchool', { title: 'College List', school:school});
+    res.render('editSchool', { title: 'College List', user:req.session.user, school:school});
   });
 }
 
@@ -65,7 +65,7 @@ exports.deleteSchool = function(req,res){
 
 exports.addBuilding = function(req, res){
   console.log(req.params.school);
-  res.render("addBuilding", {title: "Add Building", school: req.params.school});
+  res.render("addBuilding", {title: "Add Building", user:req.session.user, school: req.params.school});
 }
 
 exports.saveNewBuilding = function(req,res){
@@ -88,8 +88,42 @@ exports.saveNewBuilding = function(req,res){
 
 exports.building = function(req,res){
   console.log(req.params.building);
-  models.Building.findOne({name:req.params.school}).populate('_pictures').exec(function (err, building){
-    // console.log(school);
-    res.render('viewBuilding', { title: 'College List', building:building});
+  models.Building.findOne({name:req.params.building}).populate('_photos _comments.user').exec(function (err, building){
+    console.log(building);
+    res.render('viewBuilding', { title: 'College List', user:req.session.user, building:building});
   });
+}
+
+exports.saveNewPicture = function(req,res){
+  models.Building.findOne({name:req.body.newPicture.building}).exec(function (err, building){
+    models.School.findOne({name:req.body.newPicture.location}).exec(function (err, school){
+      var saveNewPicture = new models.Photo({picture: req.body.newPicture.picture,
+            // user: ,
+            caption: req.body.newPicture.caption,
+            location: school,
+            building: building})
+      saveNewPicture.save(function(err){
+      if (err) return ("error saving Building", err);
+      else {
+        models.Building.update({name:req.body.newPicture.building},
+          {$push: {_photos:saveNewPicture}})
+            .exec(function (err, numAffected, raw){
+              res.send({redirect: '/addPhoto'});
+        })
+      }
+      });
+    })
+  })
+}
+
+exports.addComment = function(req,res){
+  console.log(req.body);
+  console.log(req.session.user);
+  models.User.findOne({_id:req.session.user._id}).exec(function (err, poster) {
+    models.Building.update({name:req.body.building},
+      {$push: {_comments:{comment:req.body.comment, user:poster}}})
+        .exec(function (err, numAffected, raw){
+          // res.send({redirect: '/viewBuilding'});
+    })
+  })
 }

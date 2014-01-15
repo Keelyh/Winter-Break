@@ -4,8 +4,52 @@ block content
   script(src="//api.filepicker.io/v1/filepicker.js")
   .container
     .row
-      h3 Add a New School
+      .col-xs-3
+        img(src='#{building.picture}', width="270" Title='#{building.name}')
+      .col-xs-4
+        h2 #{building.name}
+        h5 #{building.type}
     .row
-      p School Name:
-        input#name(type='text',)
+      h3 Pictures
+      if (building._photos.length > 0)
+        for photo in building._photos
+          .col-xs-3
+            img.img-thumbnail(src='#{photo.picture}', Title='#{photo.caption}')
     .row
+
+    .row
+      h3 Comments
+    .row
+      textarea.newComment(cols="92", rows="3")
+        |keely is the best!
+    .row
+      br
+    .row
+      button.btn.addComment Add Comment
+    .row
+      br
+    for comment in building._comments
+      .row.comment
+        .col-xs-1
+          img(src='#{comment.user.picture}', width="70")
+        .col-xs-11
+          | #{comment.comment}
+    .row
+      |#{building}
+
+  script.
+    $('.addComment').click(function (){
+      console.log($('.newComment').val());
+      $.ajax({
+        url: '/addComment',
+        type: 'POST',
+        data: {building:'#{building.name}', comment: $('.newComment').val()},
+        dataType: 'json',
+        success: function(data) {
+          if (typeof data.redirect == 'string') {
+            window.location = data.redirect
+          }
+        }
+      });
+      return false;
+    });
