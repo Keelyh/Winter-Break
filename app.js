@@ -17,6 +17,20 @@ var path = require('path');
 
 var app = express();
 
+var uristring =
+  process.env.MONGODB_URI ||
+  process.env.MONGOLAB_URI ||
+  'mongodb://localhost/collage';
+var mongoOptions = { db: { safe: true }};
+
+mongoose.connect(uristring, mongoOptions, function (err, res) {
+  if (err) {
+    console.log('ERROR connecting to: ' + uristring + '. ' + err);
+  } else {
+    console.log('Succeeded connecting to:' + uristring + '.');
+  }
+});
+
 // all environments
 app.configure(function(){
   app.set('port', process.env.PORT || 3000);
@@ -32,19 +46,7 @@ app.configure(function(){
   app.use(app.router);
   app.use(express.static(path.join(__dirname, 'public')));
 
-  var uristring =
-    process.env.MONGODB_URI ||
-    process.env.MONGOLAB_URI ||
-    'mongodb://localhost/collage';
-  var mongoOptions = { db: { safe: true }};
 
-  mongoose.connect(uristring, mongoOptions, function (err, res) {
-    if (err) {
-      console.log('ERROR connecting to: ' + uristring + '. ' + err);
-    } else {
-      console.log('Succeeded connecting to:' + uristring + '.');
-    }
-  });
 });
 
 // development only
