@@ -84,6 +84,9 @@ app.get('/signup', user.signup);
 app.get('/signin', user.signin);
 app.post('/verify', user.login);
 app.post('/newUser', user.create);
+app.get('/profile', checkLoggedIn(), user.profile);
+app.post('/followSchool', user.followSchool);
+app.post('/profilePic', user.profilePic);
 
 
 http.createServer(app).listen(app.get('port'), function(){

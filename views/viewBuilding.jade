@@ -21,7 +21,6 @@ block content
       h3 Comments
     .row
       textarea.newComment(cols="92", rows="3")
-        |keely is the best!
     .row
       br
     .row
@@ -30,12 +29,17 @@ block content
       br
     for comment in building._comments
       .row.comment
-        .col-xs-1
-          img(src='#{comment.user.picture}', width="70")
-        .col-xs-11
-          | #{comment.comment}
-    .row
-      |#{building}
+        .col-xs-2
+          img(src='#{comment.user.picture}', width="120")
+        .col-xs-10
+          .row
+            h4 #{comment.user.name}
+          .row
+            | #{comment.comment}
+          br
+          br
+          .row
+            | #{comment.posted}
 
   script.
     $('.addComment').click(function (){

@@ -7,10 +7,14 @@ block content
   .container
     .row
       .col-xs-5
-        img(src='#{school.picture}')
+        img(src='#{school.picture}', width = "450")
       .col-xs-5
-        h1 #{school.name}
         .row
+          h1 #{school.name}
+        .row
+          button.btn.btn-success#followSchool Follow School
+        .row
+          br
           .col-xs-5
             p Established:
             p Students:
@@ -78,3 +82,15 @@ block content
       console.log($(this).attr('id'));
       window.location = "/building/" +$(this).attr('id');
     })
+    $('#followSchool').click(function (){
+      console.log('KEELY');
+      $.ajax({
+        url: '/followSchool',
+        type: 'POST',
+        data: {school:'#{school.name}'},
+        dataType: 'json',
+        success: function(data) {
+        }
+      });
+      return false;
+    });

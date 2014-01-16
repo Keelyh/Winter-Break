@@ -1,0 +1,37 @@
+extends layout
+
+block content
+  script(src="//api.filepicker.io/v1/filepicker.js")
+  .container
+    .row
+      .col-xs-3
+        img.img-thumbnail#profilePic(src='#{user.picture}')
+      .col-xs-3
+        h3 #{user.name}
+    .row
+      h3 Following
+    .row
+      for school in user._followSchools
+        .col-xs-3
+          img.img-thumbnail(src='#{school.picture}')
+
+
+
+
+  script.
+    filepicker.setKey('AG4iSyAFR1ix7zdHsvAtKz');
+    $('#profilePic').click(function (){
+      filepicker.pickAndStore({mimetype: 'image/*'}, {}, function (InkBlobs){
+        $.ajax({
+          url: '/profilePic',
+          type: 'POST',
+          data: {profilePic: InkBlobs[0].url+'/convert?w=160&h=160&fit=clip'},
+          dataType: 'json',
+          success: function(data) {
+            if (typeof data.redirect == 'string') {
+              window.location = data.redirect;
+            }
+          }
+        });
+      });
+    });

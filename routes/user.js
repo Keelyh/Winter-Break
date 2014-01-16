@@ -9,11 +9,11 @@ exports.list = function(req, res){
 };
 
 exports.signin = function(req, res){
-    res.render('signin', {title: 'Shwastinator'});
+  res.render('signin', {title: 'Collage'});
 }
 
 exports.signup = function(req, res){
-    res.render('signup', {title: 'Shwastinator'});
+  res.render('signup', {title: 'Collage'});
 }
 
 exports.login = function(req,res){
@@ -45,4 +45,29 @@ exports.create = function(req, res){
     req.session.user = new_user;
     res.send({redirect: '/'});
   });
+}
+
+exports.profile =function(req, res){
+  models.User.findOne({_id:req.session.user._id}).populate('_followSchools _followPeople').exec(function (err, user) {
+    res.render('profile', {title: "Collage", user:user})
+  })
+}
+
+exports.followSchool = function(req, res){
+  console.log(req.body.school);
+  models.School.findOne({name:req.body.school}).exec(function (err, school) {
+    console.log("SCHOOL: ", school);
+    models.User.update({_id:req.session.user._id},
+      {$push: {_followSchools:school}})
+        .exec(function (err, numAffected, raw){
+          // res.send({redirect: '/viewBuilding'});
+    })
+  })
+}
+
+exports.profilePic = function (req, res){
+  models.User.update({name: req.session.user.name}, {$set: {picture: req.body.profilePic}}).exec(function (err, numAffected, raw){
+      res.send({redirect: '/profile'});
+    });
+
 }
