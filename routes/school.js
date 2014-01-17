@@ -38,10 +38,6 @@ exports.saveChanges = function(req,res){
 }
 
 exports.saveNewSchool = function(req,res){
-  console.log(req.body);
-  models.SchoolList.update({}, {$push: {schools:req.body.newSchool.name}}).exec(function (err, numAffected, raw){
-    console.log("Updated");
-  });
   var newSchool = new models.School({name: req.body.newSchool.name,
                                       est:req.body.newSchool.est,
                                       students:req.body.newSchool.students,
