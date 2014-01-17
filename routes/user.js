@@ -67,7 +67,11 @@ exports.followSchool = function(req, res){
 
 exports.profilePic = function (req, res){
   models.User.update({name: req.session.user.name}, {$set: {picture: req.body.profilePic}}).exec(function (err, numAffected, raw){
-      res.send({redirect: '/profile'});
-    });
+    res.send({redirect: '/profile'});
+  });
+}
 
+exports.logout = function(req,res){
+  delete req.session.user;
+  res.redirect('/');
 }

@@ -89,6 +89,7 @@ app.post('/newUser', user.create);
 app.get('/profile', checkLoggedIn(), user.profile);
 app.post('/followSchool', user.followSchool);
 app.post('/profilePic', user.profilePic);
+app.get('/logout', user.logout);
 
 
 http.createServer(app).listen(app.get('port'), function(){

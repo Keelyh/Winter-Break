@@ -16,5 +16,12 @@ nav.navbar.navbar-default(role='navigation')
       li
         a(href='/profile') Profile
     ul.nav.navbar-nav.navbar-right
-      li
-        a(href='/profile') #{user.name}
+      li.dropdown
+        a.dropdown-toggle(href='#', data-toggle='dropdown')
+          | #{user.name}
+          b.caret
+        ul.dropdown-menu
+          li
+            a(href='/profile') Profile
+          li
+            a(href='/logout') Log Out
