@@ -53,3 +53,10 @@ var photoSchema = new Schema({
 
 var Photo =mongoose.model('Photo', photoSchema);
 exports.Photo = Photo;
+
+var slistSchema = new Schema({
+        schools : [String]
+})
+
+var SchoolList =mongoose.model('SchoolList', slistSchema);
+exports.SchoolList = SchoolList;

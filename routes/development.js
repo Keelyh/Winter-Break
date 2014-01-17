@@ -15,6 +15,12 @@ exports.populate = function(req, res){
         if (err) return ("error saving Olin", err);
         console.log('Olin saved');
     });
+    var list = new models.SchoolList({schools:['Olin College']})
+    list.save(function(err){
+        if (err) return ("error saving Olin", err);
+        console.log('Olin saved');
+    });
+
     // var scripps = new models.School({name: "Scripps College", est:1926, students:950,
     //                 ratio: "9 to 1", picture: "/images/scripps.jpg"})
     // scripps.save(function(err){

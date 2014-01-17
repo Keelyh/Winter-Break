@@ -7,7 +7,7 @@ block content
         .col-xs-4
           h3 Find A School:
         .col-xs-3
-          input#SchoolSearch(type='text', placeholder= 'This doesnt work yet :(')
+          input.typeahead-devs#SchoolSearch(type='text', placeholder= 'This doesnt work yet :(')
         .col-xs-4
           button.btn.btn-inverse(type='submit', id='searchSchool') Search
         .col-xs-1.text-right
@@ -26,6 +26,9 @@ block content
             p Students: #{school.students}
             p Student to Faculty Ratio: #{school.ratio}
 
+    | #{schoolList}
+    | #{schoolList.schools}
+
   script.
     $('.schoolPanel').click(function (){
       window.location = "/schoolPage/" + $(this).attr('id');
@@ -35,3 +38,7 @@ block content
     //-   $.get('/addSchool');
     //-   return false;
     //- });
+    $('input.typeahead-devs').typeahead({
+      name: 'accounts',
+      local: #{schoolList.schools}
+    });
